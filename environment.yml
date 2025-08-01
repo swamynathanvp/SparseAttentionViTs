@@ -1,0 +1,6 @@
+name: IvT
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8.12
+  - pip

@@ -71,7 +71,7 @@ class Attention(nn.Module):
 
 class Transformer(nn.Module):
     def __init__(self, dim, depth, heads, dim_head, mlp_dim,attention_to_use, dropout = 0.):
-        config = BigBirdConfig(hidden_size=dim,num_hidden_layers=depth,num_attention_heads=heads,hidden_dropout_prob=dropout,block_size=10)
+        config = BigBirdConfig(hidden_size=dim,num_hidden_layers=depth,num_attention_heads=heads,hidden_dropout_prob=dropout,block_size=5)
         super().__init__()
         self.layers = nn.ModuleList([])
         for _ in range(depth):

@@ -144,7 +144,7 @@ class BigBirdBlockSparseAttention(nn.Module):
         #         buffered_token_type_ids = self.embeddings.token_type_ids[:, :seq_length]
         #         buffered_token_type_ids_expanded = buffered_token_type_ids.expand(batch_size, seq_length)
         #         token_type_ids = buffered_token_type_ids_expanded
-        # else:
+        #else:
         token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=device)
             
         attention_mask = torch.ones(((batch_size, seq_length + past_key_values_length)), device=device)
@@ -197,7 +197,9 @@ class BigBirdBlockSparseAttention(nn.Module):
         batch_size, seqlen, _ = hidden_states.size()
         to_seq_length = from_seq_length = seqlen
         from_block_size = to_block_size = self.block_size
-
+        print(inputs_embeds.shape)
+        print(from_block_size)
+        print(seqlen)
         if from_seq_length % from_block_size != 0:
             raise ValueError("Query sided sequence length must be multiple of block size")
 
@@ -604,15 +606,15 @@ class BigBirdBlockSparseAttention(nn.Module):
             last_attn_weights = nn.functional.softmax(last_product, dim=-1)  # [bsz, n_heads, from_block_size, n]
             last_context_layer = self.torch_bmm_nd(last_attn_weights, value_layer, ndim=4)
             last_context_layer.unsqueeze_(2)
-        else:
-            last_context_layer =  torch.zeros(n1, n2, 1, n3, n4).to(device)
+        # else:
+            # last_context_layer =  torch.zeros(n1, n2, 1, n3, n4).to(device)
 
-        n1,n2,_,n3,n4 = last_context_layer.shape
-        device = last_context_layer.device
-        first_context_layer = torch.zeros(n1, n2, 1, n3, n4).to(device)
-        second_context_layer = torch.zeros(n1, n2, 1, n3, n4).to(device)
-        context_layer =torch.zeros(n1, n2, 49, n3, n4).to(device)
-        second_last_context_layer = torch.zeros(n1, n2, 1, n3, n4).to(device)
+        # n1,n2,_,n3,n4 = last_context_layer.shape
+        # device = last_context_layer.device
+        # first_context_layer = torch.zeros(n1, n2, 1, n3, n4).to(device)
+        # second_context_layer = torch.zeros(n1, n2, 1, n3, n4).to(device)
+        # context_layer =torch.zeros(n1, n2, 49, n3, n4).to(device)
+        # second_last_context_layer = torch.zeros(n1, n2, 1, n3, n4).to(device)
 
 
 

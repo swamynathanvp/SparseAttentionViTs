@@ -34,9 +34,9 @@ parser.add_argument('--resume_ckpt')
 args = parser.parse_args()
 
 def main(args):
-    BASE_CKPT_PATH = "D:\\Swamy\\SparseAttentionViT-main\\ckpts"
+    BASE_CKPT_PATH = r"C:\Users\vpswa\Downloads\SparseAttentionViTs-main\ckpt"
     MODEL_CKPT_PATH = os.path.join(BASE_CKPT_PATH, args.vit_arch)
-    BASE_TENSORBOARD_PATH = "D:\\Swamy\\SparseAttentionViT-main\\tensorboard"
+    BASE_TENSORBOARD_PATH = r"C:\Users\vpswa\Downloads\SparseAttentionViTs-main\tensorboard"
     BASE_LOG_NAME = f"{args.image_size}_p{args.patch_size}"
     CUSTOM_LOG_NAME = "_BB_Global-200epochs_1e-3"
     RUN_LOG_NAME = BASE_LOG_NAME + CUSTOM_LOG_NAME
@@ -71,8 +71,8 @@ def main(args):
                              std=[0.229, 0.224, 0.225])
     ])
 
-    train_set = datasets.ImageFolder(root="D:\\Swamy\\SparseAttentionViT-main\\data\\imagenette2-320\\train", transform=transform_train)
-    test_set = datasets.ImageFolder(root="D:\\Swamy\\SparseAttentionViT-main\\data\\imagenette2-320\\val", transform=transform_test)
+    train_set = datasets.ImageFolder(root=r"C:\Users\vpswa\Downloads\SparseAttentionViTs-main\imagenette2\train", transform=transform_train)
+    test_set = datasets.ImageFolder(root=r"C:\Users\vpswa\Downloads\SparseAttentionViTs-main\imagenette2\val", transform=transform_test)
 
     train_loader = DataLoader(train_set, batch_size=args.train_batch_size, shuffle=True, num_workers=2)
     valid_loader = DataLoader(test_set, batch_size=args.test_batch_size, shuffle=False, num_workers=2)
@@ -92,7 +92,7 @@ def main(args):
             pool='mean'
         )
     elif args.vit_arch == "BigBirdViT":
-        attentions_to_use = ["Global"]
+        attentions_to_use = ["Global","Window","Random"]
         model = BigBirdViT(
             image_size=args.image_size,
             patch_size=args.patch_size,
@@ -180,6 +180,12 @@ if __name__ == '__main__':
 # CLassic: python -m torch.distributed.launch --nproc_per_node=4 --node_rank=0 train_vit.py
 # BigBird: python -m torch.distributed.launch --nproc_per_node=4 --node_rank=0 train_vit.py --vit_arch BigBirdViT
 # python -m torch.distributed.launch --nproc_per_node=4 --node_rank=0 train_vit.py --vit_arch BigBirdViT --patch_size=8 --image_size=184
+
+
+
+#python train_vit.py --vit_arch BigBirdViT --patch_size=8 --image_size=384
+
+
 
 # python -m torch.distributed.launch --nproc_per_node=4 --node_rank=0 --master_port 47770 train_vit.py --vit_arch OriginalViT --patch_size=8 --image_size=384
 # python -m torch.distributed.launch --nproc_per_node=4 --node_rank=0 --master_port 47770 train_vit.py --vit_arch BigBirdViT --patch_size=8 --image_size=384
